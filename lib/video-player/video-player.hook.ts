@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
+import type { ChangeEvent, KeyboardEvent } from 'react'
 
 export const useVideoPlayer = () => {
   const container = useRef<HTMLDivElement>(null)
@@ -10,6 +11,49 @@ export const useVideoPlayer = () => {
   const [progress, setProgress] = useState(0)
   const [durationTime, setDurationTime] = useState(0)
   const { toggleFullscreen } = useFullscreen()
+
+  useEffect(() => {
+    if (!video.current) return
+    const media = video.current
+
+    const isMobileDevice = window.navigator.userAgent
+      .toLowerCase()
+      .includes('mobi')
+
+    isMobileDevice && (media.controls = true)
+
+    const updateDurationTime = () => setDurationTime(media?.duration!)
+
+    const updateEnded = () => setEnded(true)
+
+    media.duration && updateDurationTime()
+    media.addEventListener('loadeddata', updateDurationTime)
+    media.addEventListener('ended', updateEnded)
+    
+    document.addEventListener('keydown', changeProgress)
+
+    return () => {
+      media.removeEventListener('loadeddata', updateDurationTime)
+      media.removeEventListener('ended', updateEnded)
+      document.removeEventListener('keydown', changeProgress)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!video.current) return
+    isPlaying ? video.current.play() : video.current.pause()
+  }, [isPlaying, video])
+
+  useEffect(() => {
+    if (!video.current || !isEnded) return
+    video.current.pause()
+    setPlaying(false)
+  }, [isEnded])
+
+  useEffect(() => {
+    if (!video.current) return
+    isMuted ? (video.current.muted = true) : (video.current.muted = false)
+  }, [isMuted, video])
 
   const play = () => setPlaying(true)
   const pause = () => setPlaying(false)
@@ -27,7 +71,7 @@ export const useVideoPlayer = () => {
     setProgress((video.current.currentTime / video.current.duration) * 100)
   }
 
-  const updateProgress = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const updateProgress = (event: ChangeEvent<HTMLInputElement>) => {
     if (!video.current) return
 
     const value = Number(event.target.value)
@@ -36,9 +80,11 @@ export const useVideoPlayer = () => {
     setProgress(value)
   }
 
-  const changeProgress = (event: React.KeyboardEvent) => {
+  const changeProgress = (
+    event: globalThis.KeyboardEvent | KeyboardEvent<HTMLInputElement>
+  ) => {
     document.activeElement?.tagName === 'INPUT' && event.preventDefault()
-    
+
     if (!video.current) return
 
     switch (event.key) {
@@ -60,47 +106,6 @@ export const useVideoPlayer = () => {
       .filter(Boolean)
       .join(':')
   }
-
-  useEffect(() => {
-    if (!video.current) return
-
-    const isMobileDevice = window.navigator.userAgent
-      .toLowerCase()
-      .includes('mobi')
-    
-    isMobileDevice && (video.current.controls = true)
-    
-    const updateDurationTime = () => setDurationTime(video.current?.duration!)
-
-    const updateEnded = () => setEnded(true)
-
-    video.current?.duration && updateDurationTime()
-    video.current.addEventListener('loadeddata', updateDurationTime)
-    video.current.addEventListener('ended', updateEnded)
-    document.addEventListener('keydown', changeProgress)
-
-    return () => {
-      video.current?.removeEventListener('loadeddata', updateDurationTime)
-      video.current?.removeEventListener('ended', updateEnded)
-      document.removeEventListener('keydown', changeProgress)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!video.current) return
-    isPlaying ? video.current.play() : video.current.pause()
-  }, [isPlaying, video])
-
-  useEffect(() => {
-    if (!video.current || !isEnded) return
-    video.current.pause()
-    setPlaying(false)
-  }, [isEnded])
-
-  useEffect(() => {
-    if (!video.current) return
-    isMuted ? (video.current.muted = true) : (video.current.muted = false)
-  }, [isMuted, video])
 
   return {
     container,
