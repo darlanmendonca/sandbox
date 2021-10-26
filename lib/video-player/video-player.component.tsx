@@ -60,7 +60,8 @@ const VideoPlayer: React.FC<Props> = ({ poster, sources }) => {
 
         <Progress>
           <input
-            aria-label="Current Progress"
+            aria-label="Progress"
+            title="Progress"
             type="range"
             max="100"
             step="0.01"
@@ -73,7 +74,7 @@ const VideoPlayer: React.FC<Props> = ({ poster, sources }) => {
           <progress value={progress} max="100" aria-hidden="true" />
         </Progress>
 
-        <Timer title="Total time">{timeFormat(durationTime)}</Timer>
+        <Timer title="Total Time">{timeFormat(durationTime)}</Timer>
         <Button onClick={toggleFullscreen}>Fullscreen</Button>
       </Controls>
     </Container>
