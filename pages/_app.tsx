@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import 'lib/typography/typography.style.css'
 import type { AppProps } from 'next/app'
 
 function MyApp({ Component, pageProps }: AppProps) {

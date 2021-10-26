@@ -1,0 +1,10 @@
+{
+  "extends": "next",
+  "rules": {
+    "semi": ["error", "never"],
+    "quotes": ["error", "single"],
+    "react-hooks/exhaustive-deps": "off",
+    "react/no-unescaped-entities": "off",
+    "react/display-name": "off"
+  }
+}
