@@ -30,6 +30,10 @@ export const Controls = styled.div`
   transition: transform .2s ease;
   align-items: center;
   justify-content: center;
+
+  @media (hover: none) {
+    display: none;
+  }
 `
 
 export const Button = styled.button`

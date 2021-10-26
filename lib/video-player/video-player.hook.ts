@@ -64,6 +64,12 @@ export const useVideoPlayer = () => {
   useEffect(() => {
     if (!video.current) return
 
+    const isMobileDevice = window.navigator.userAgent
+      .toLowerCase()
+      .includes('mobi')
+    
+    isMobileDevice && (video.current.controls = true)
+    
     const updateDurationTime = () => setDurationTime(video.current?.duration!)
 
     const updateEnded = () => setEnded(true)
