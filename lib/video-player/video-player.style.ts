@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 export const Container = styled.div`
   position: relative;
   font-size: 10px;
-  --spacing: 1.7em;
+  --spacing: 1.7rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,9 +22,9 @@ export const Container = styled.div`
 export const Controls = styled.div`
   position: absolute;
   bottom: 0;
-  left: 2em;
-  padding-bottom: 2em;
-  width: calc(100% - 4em);
+  left: 2rem;
+  padding-bottom: 2rem;
+  width: calc(100% - 4rem);
   overflow: hidden;
 
   @media (hover: none) {
@@ -32,7 +32,7 @@ export const Controls = styled.div`
   }
 
   div {
-    height: 1.6em;
+    height: 1.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,8 +45,8 @@ export const Button = styled.button`
   background: none;
   border-radius: 4px;
   font-size: inherit;
-  /* width: 1.8em; */
-  height: 1.6em;
+  /* width: 1.8rem; */
+  height: 1.6rem;
   color: white;
   margin-right: var(--spacing);
   cursor: pointer;
@@ -69,11 +69,11 @@ export const Progress = styled.div`
   progress {
     z-index: 0;
     position: absolute;
-    top: 0.8em;
+    top: 0.8rem;
     left: 0;
     width: 100%;
     appearance: none;
-    height: 0.4em;
+    height: 0.4rem;
     background: none;
     border: 1px solid white;
     box-sizing: border-box;
@@ -96,7 +96,7 @@ export const Progress = styled.div`
   input {
     appearance: none;
     width: 100%;
-    height: 1.6em;
+    height: 1.6rem;
     background: none;
     outline: none;
     cursor: pointer;
@@ -110,10 +110,10 @@ export const Progress = styled.div`
 
     &::-webkit-slider-thumb {
       appearance: none;
-      width: 0.4em;
-      height: 1.6em;
+      width: 0.4rem;
+      height: 1.6rem;
       background: var(--accent-color);
-      transform: translateY(-0.4em);
+      transform: translateY(-0.3em);
 
       @media not all and (min-resolution: 0.001dpcm) {
         transform: translateY(-0.45em);
@@ -122,55 +122,33 @@ export const Progress = styled.div`
 
     &::-moz-range-thumb {
       appearance: none;
-      width: 0.4em;
-      height: 1.6em;
+      width: 0.4rem;
+      height: 1.6rem;
       background: var(--accent-color);
       border-radius: 0;
       border: 0;
     }
 
     &::-webkit-slider-runnable-track {
-      /* background: var(--accent-color); */
       background: none;
-      height: 0.4em;
+      height: 0.4rem;
     }
 
     &::-moz-range-track {
       background: none;
-      height: 0.4em;
+      height: 0.4rem;
     }
   }
 `
 
 export const Timer = styled.div`
   color: white;
-  min-width: 3em;
+  min-width: 3rem;
 `
 
 export const Video = styled.video`
   display: block;
   width: 100%;
-`
-
-export const Playlist = styled.div`
-  position: absolute;
-  top: 40%;
-  transform: translateY(-50%);
-  right: 10px;
-  width: 280px;
-  height: 250px;
-  border-radius: 5px;
-  background: white;
-  box-shadow: 0 1px 3px gray;
-  
-  header {
-    cursor: move;
-    background: lightblue;
-    color: black;
-    text-align: center;
-    line-height: 2em;
-    font-size: 2em;
-    border-top-left-radius: inherit;
-    border-top-right-radius: inherit;
-  }
+  object-fit: contain;
+  max-height: 100vh;
 `

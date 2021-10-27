@@ -1,41 +1,62 @@
 import { useRef, useState, useEffect } from 'react'
 import type { ChangeEvent, KeyboardEvent } from 'react'
 
-export const useVideoPlayer = () => {
+export const useVideoPlayer = (source: string) => {
   const container = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
+  const previousSource = useRef('')
   const [isPlaying, setPlaying] = useState(false)
   const [isEnded, setEnded] = useState(false)
   const [isMuted, setMuted] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [progress, setProgress] = useState(0)
   const [durationTime, setDurationTime] = useState(0)
+  const [canPlay, setCanPlay] = useState(false)
   const { toggleFullscreen } = useFullscreen()
 
   useEffect(() => {
+    if (previousSource.current === source) return
+
+    if (video.current) {
+      video.current.load()
+      canPlay && video.current.play()
+    }
+
+    previousSource.current = source
+  }, [source, canPlay])
+
+  useEffect(() => {
     if (!video.current) return
-    const media = video.current
+    const _video = video.current
 
     const isMobileDevice = window.navigator.userAgent
       .toLowerCase()
       .includes('mobi')
 
-    isMobileDevice && (media.controls = true)
+    isMobileDevice && (_video.controls = true)
 
-    const updateDurationTime = () => setDurationTime(media?.duration!)
-
+    const updateDurationTime = () => setDurationTime(_video?.duration!)
     const updateEnded = () => setEnded(true)
+    const updateCanPlay = () => setCanPlay(true)
+    const updatePlay = () => setPlaying(true)
+    const updatePause = () => setPlaying(false)
 
-    media.duration && updateDurationTime()
-    media.addEventListener('loadeddata', updateDurationTime)
-    media.addEventListener('ended', updateEnded)
+    _video.duration && updateDurationTime()
+    _video.addEventListener('loadeddata', updateDurationTime)
+    _video.addEventListener('ended', updateEnded)
+    _video.addEventListener('canplay', updateCanPlay)
+    _video.addEventListener('play', updatePlay)
+    _video.addEventListener('pause', updatePause)
     
     document.addEventListener('keydown', changeProgress)
 
     return () => {
-      media.removeEventListener('loadeddata', updateDurationTime)
-      media.removeEventListener('ended', updateEnded)
+      _video.removeEventListener('loadeddata', updateDurationTime)
+      _video.removeEventListener('ended', updateEnded)
       document.removeEventListener('keydown', changeProgress)
+      _video.removeEventListener('canplay', updateCanPlay)
+      _video.removeEventListener('play', updatePlay)
+      _video.removeEventListener('pause', updatePause)
     }
   }, [])
 
@@ -67,8 +88,11 @@ export const useVideoPlayer = () => {
 
   const updateCurrentTime = () => {
     if (!video.current) return
+    const duration = Number.isNaN(video.current.duration)
+      ? 1
+      : video.current.duration
     setCurrentTime(video.current.currentTime)
-    setProgress((video.current.currentTime / video.current.duration) * 100)
+    setProgress((video.current.currentTime / duration) * 100)
   }
 
   const updateProgress = (event: ChangeEvent<HTMLInputElement>) => {

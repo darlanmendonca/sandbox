@@ -1,16 +1,12 @@
 import Head from 'next/head'
+import MediaPlayerContext from 'lib/media-player/media-player.context'
 import VideoPlayer from 'lib/video-player/video-player.component'
+import MediaPlayer from 'lib/media-player/media-player.component'
+import useMediaPlayer from 'lib/media-player/media-player.hook'
 
 const Video: React.FC = () => {
-  const video = {
-    poster:
-      'video-player/Killswitch Engage - Rose of Sharyn guitar cover by Alex S.poster.jpg',
-    sources: [
-      'video-player/Killswitch Engage - Rose of Sharyn guitar cover by Alex S.mp4',
-      // 'https://www.w3schools.com/html/mov_bbb.mp4',
-      // 'https://www.w3schools.com/html/mov_bbb.ogg',
-    ],
-  }
+  const { Provider } = MediaPlayerContext
+  const { playlist, currentMedia, playMedia } = useMediaPlayer()
 
   return (
     <>
@@ -18,7 +14,10 @@ const Video: React.FC = () => {
         <title>Video Player</title>
       </Head>
 
-      <VideoPlayer poster={video.poster} sources={video.sources} />
+      <Provider value={{ playlist, currentMedia, playMedia }}>
+        <VideoPlayer poster={currentMedia.poster} source={currentMedia.source} />
+        <MediaPlayer playlist={playlist} />
+      </Provider>
     </>
   )
 }

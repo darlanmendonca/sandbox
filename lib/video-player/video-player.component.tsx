@@ -5,14 +5,12 @@ import {
   Button,
   Progress,
   Timer,
-  Playlist,
 } from './video-player.style'
 import { useVideoPlayer } from './video-player.hook'
-import Draggable from 'react-draggable'
 
-import type { VideoProps as Props } from './vide-player.types'
+import type { VideoProps as Props } from './video-player.types'
 
-const VideoPlayer: React.FC<Props> = ({ poster, sources }) => {
+const VideoPlayer: React.FC<Props> = ({ poster, source }) => {
   const {
     container,
     video,
@@ -30,7 +28,7 @@ const VideoPlayer: React.FC<Props> = ({ poster, sources }) => {
     updateProgress,
     changeProgress,
     toggleFullscreen,
-  } = useVideoPlayer()
+  } = useVideoPlayer(source)
 
   return (
     <Container ref={container} data-is-playing={isPlaying}>
@@ -41,13 +39,10 @@ const VideoPlayer: React.FC<Props> = ({ poster, sources }) => {
         onTimeUpdate={updateCurrentTime}
         onClickCapture={togglePlay}
       >
-        {sources.map((source, index) => (
-          <source
-            key={index}
-            src={source}
-            type={`video/${source.split('.').pop()}`}
-          />
-        ))}
+        <source
+          src={source}
+          type={`video/${source.split('.').pop()}`}
+        />
       </Video>
 
       <Controls>
@@ -81,12 +76,6 @@ const VideoPlayer: React.FC<Props> = ({ poster, sources }) => {
           <Button onClick={toggleFullscreen}>Fullscreen</Button>
         </div>
       </Controls>
-
-      <Draggable handle="#handle">
-        <Playlist>
-          <header id="handle">Playlist</header>
-        </Playlist>
-      </Draggable>
     </Container>
   )
 }
