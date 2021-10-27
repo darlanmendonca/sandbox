@@ -8,31 +8,35 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   background: black;
-  overflow: hidden;
 
-  & > div {
+  & > div div {
     transform: translateY(250%);
   }
 
-  :hover > div,
-  &[data-is-playing='false'] > div {
+  :hover > div div,
+  &[data-is-playing='false'] > div div {
     transform: translateY(0%);
   }
 `
 
 export const Controls = styled.div`
   position: absolute;
-  bottom: 2em;
+  bottom: 0;
   left: 2em;
+  padding-bottom: 2em;
   width: calc(100% - 4em);
-  height: 1.6em;
-  display: flex;
-  transition: transform .2s ease;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
 
   @media (hover: none) {
     display: none;
+  }
+
+  div {
+    height: 1.6em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
   }
 `
 
@@ -109,7 +113,7 @@ export const Progress = styled.div`
       width: 0.4em;
       height: 1.6em;
       background: var(--accent-color);
-      transform: translateY(-0.6em);
+      transform: translateY(-0.4em);
 
       @media not all and (min-resolution: 0.001dpcm) {
         transform: translateY(-0.45em);
@@ -146,4 +150,27 @@ export const Timer = styled.div`
 export const Video = styled.video`
   display: block;
   width: 100%;
+`
+
+export const Playlist = styled.div`
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  right: 10px;
+  width: 280px;
+  height: 250px;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 1px 3px gray;
+  
+  header {
+    cursor: move;
+    background: lightblue;
+    color: black;
+    text-align: center;
+    line-height: 2em;
+    font-size: 2em;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
 `
