@@ -19,11 +19,19 @@ const useMediaPlayer = () => {
   ]
 
   const [currentMedia, setCurrentMedia] = useState<Media>(playlist[0])
+  const [isPlaying, setPlaying] = useState(false)
+
+  const play = () => setPlaying(true)
+  const pause = () => setPlaying(false)
 
   return {
     playlist,
     currentMedia,
-    playMedia: (media: Media) => () => setCurrentMedia(media)
+    playMedia: (media: Media) => () => setCurrentMedia(media),
+    isPlaying,
+    setPlaying,
+    play,
+    pause,
   }
 }
 

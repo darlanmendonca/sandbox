@@ -17,7 +17,7 @@ import type { MediaPlayerProps as Props } from './media-player.types'
 
 const MediaPlayer: React.FC<Props> = ({ children, playlist }) => {
   const { position, handle, trackPosition } = useDraggable()
-  const { playMedia, currentMedia } = useContext(MediaPlayerContext)
+  const { playMedia, currentMedia, isPlaying, play, pause } = useContext(MediaPlayerContext)
   const [hasPointerEvents, setPointerEvents] = useState(false)
 
   return (
@@ -46,7 +46,9 @@ const MediaPlayer: React.FC<Props> = ({ children, playlist }) => {
             <Handle data-handle />
             <Header>
               <div>
-                <Button>play</Button>
+                <Button onClick={() => isPlaying ? pause() : play()}>
+                  {isPlaying ? 'pause' : 'play'}
+                </Button>
                 <Button>prev</Button>
                 <Button>next</Button>
                 <Button style={{ marginLeft: '5rem' }}>minimize</Button>

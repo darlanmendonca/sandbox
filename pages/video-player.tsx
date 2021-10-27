@@ -6,7 +6,7 @@ import useMediaPlayer from 'lib/media-player/media-player.hook'
 
 const Video: React.FC = () => {
   const { Provider } = MediaPlayerContext
-  const { playlist, currentMedia, playMedia } = useMediaPlayer()
+  const { playlist, currentMedia, ...mediaPlayerContext } = useMediaPlayer()
 
   return (
     <>
@@ -14,8 +14,11 @@ const Video: React.FC = () => {
         <title>Video Player</title>
       </Head>
 
-      <Provider value={{ playlist, currentMedia, playMedia }}>
-        <VideoPlayer poster={currentMedia.poster} source={currentMedia.source} />
+      <Provider value={{ playlist, currentMedia, ...mediaPlayerContext }}>
+        <VideoPlayer
+          poster={currentMedia.poster}
+          source={currentMedia.source}
+        />
         <MediaPlayer playlist={playlist} />
       </Provider>
     </>

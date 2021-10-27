@@ -1,4 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
+import { useContext } from 'react'
+import MediaPlayerContext from 'lib/media-player/media-player.context'
+
 import type { ChangeEvent, KeyboardEvent } from 'react'
 
 export const useVideoPlayer = (source: string) => {
@@ -13,6 +16,12 @@ export const useVideoPlayer = (source: string) => {
   const [durationTime, setDurationTime] = useState(0)
   const [canPlay, setCanPlay] = useState(false)
   const { toggleFullscreen } = useFullscreen()
+
+  const { isPlaying: mediaIsPlaying, setPlaying: setMediaPlaying } = useContext(MediaPlayerContext)
+
+  useEffect(() => {
+    setPlaying(mediaIsPlaying)
+  }, [mediaIsPlaying])
 
   useEffect(() => {
     if (previousSource.current === source) return
@@ -63,7 +72,8 @@ export const useVideoPlayer = (source: string) => {
   useEffect(() => {
     if (!video.current) return
     isPlaying ? video.current.play() : video.current.pause()
-  }, [isPlaying, video])
+    setMediaPlaying(isPlaying)
+  }, [isPlaying, video, setMediaPlaying])
 
   useEffect(() => {
     if (!video.current || !isEnded) return
