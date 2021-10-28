@@ -7,6 +7,7 @@ import {
   Timer,
 } from './video-player.style'
 import { useVideoPlayer } from './video-player.hook'
+import MediaPlayer from 'lib/media-player/media-player.component'
 
 import type { VideoProps as Props } from './video-player.types'
 
@@ -27,7 +28,9 @@ const VideoPlayer: React.FC<Props> = ({ poster, source }) => {
     progress,
     updateProgress,
     changeProgress,
+    isFullscreen,
     toggleFullscreen,
+    playlist,
   } = useVideoPlayer(source)
 
   return (
@@ -39,10 +42,7 @@ const VideoPlayer: React.FC<Props> = ({ poster, source }) => {
         onTimeUpdate={updateCurrentTime}
         onClickCapture={togglePlay}
       >
-        <source
-          src={source}
-          type={`video/${source.split('.').pop()}`}
-        />
+        <source src={source} type={`video/${source.split('.').pop()}`} />
       </Video>
 
       <Controls>
@@ -76,6 +76,8 @@ const VideoPlayer: React.FC<Props> = ({ poster, source }) => {
           <Button onClick={toggleFullscreen}>Fullscreen</Button>
         </div>
       </Controls>
+
+      {isFullscreen && <MediaPlayer playlist={playlist} />}
     </Container>
   )
 }

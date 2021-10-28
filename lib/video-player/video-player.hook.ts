@@ -15,9 +15,10 @@ export const useVideoPlayer = (source: string) => {
   const [progress, setProgress] = useState(0)
   const [durationTime, setDurationTime] = useState(0)
   const [canPlay, setCanPlay] = useState(false)
+  const [isFullscreen, setFullscreen] = useState(false)
   const { toggleFullscreen } = useFullscreen()
 
-  const { isPlaying: mediaIsPlaying, setPlaying: setMediaPlaying } = useContext(MediaPlayerContext)
+  const { playlist, isPlaying: mediaIsPlaying, setPlaying: setMediaPlaying } = useContext(MediaPlayerContext)
 
   useEffect(() => {
     setPlaying(mediaIsPlaying)
@@ -37,6 +38,7 @@ export const useVideoPlayer = (source: string) => {
   useEffect(() => {
     if (!video.current) return
     const _video = video.current
+    const _container = container.current
 
     const isMobileDevice = window.navigator.userAgent
       .toLowerCase()
@@ -49,6 +51,7 @@ export const useVideoPlayer = (source: string) => {
     const updateCanPlay = () => setCanPlay(true)
     const updatePlay = () => setPlaying(true)
     const updatePause = () => setPlaying(false)
+    const updateFullscreen = () => setFullscreen((isFullscreen) => !isFullscreen)
 
     _video.duration && updateDurationTime()
     _video.addEventListener('loadeddata', updateDurationTime)
@@ -56,6 +59,7 @@ export const useVideoPlayer = (source: string) => {
     _video.addEventListener('canplay', updateCanPlay)
     _video.addEventListener('play', updatePlay)
     _video.addEventListener('pause', updatePause)
+    _container?.addEventListener('fullscreenchange', updateFullscreen)
     
     document.addEventListener('keydown', changeProgress)
 
@@ -66,6 +70,7 @@ export const useVideoPlayer = (source: string) => {
       _video.removeEventListener('canplay', updateCanPlay)
       _video.removeEventListener('play', updatePlay)
       _video.removeEventListener('pause', updatePause)
+      _container?.removeEventListener('fullscreenchange', updateFullscreen)
     }
   }, [])
 
@@ -157,7 +162,9 @@ export const useVideoPlayer = (source: string) => {
     progress,
     updateProgress,
     changeProgress,
+    isFullscreen,
     toggleFullscreen: () => toggleFullscreen(container?.current),
+    playlist,
   }
 }
 
